@@ -9,7 +9,7 @@ export class LogService {
 
   public logs: Log[];
 
-  private logSource = new BehaviorSubject<Log>({id: null, text: null, date: null});
+  private logSource = new BehaviorSubject<Log>({ id: null, text: null, date: null });
   public selectedLog = this.logSource.asObservable();
 
   constructor() {
@@ -26,6 +26,27 @@ export class LogService {
 
   public setFormLog(log: Log) {
     this.logSource.next(log);
+  }
+
+  public addLog(log: Log) {
+    this.logs.unshift(log);
+  }
+
+  public updateLog(log: Log) {
+    this.logs.forEach((cur, index) => {
+      if (log.id === cur.id) {
+        this.logs.splice(index, 1);
+      }
+    });
+    this.logs.unshift(log);
+  }
+
+  public deleteLog(log: Log) {
+    for (let i = 0; i < this.logs.length; i++) {
+      if (log.id === this.logs[i].id) {
+        this.logs.splice(i, 1);
+      }
+    }
   }
 
 }

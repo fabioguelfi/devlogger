@@ -14,11 +14,17 @@ export class LogsComponent implements OnInit {
   constructor(private log: LogService) { }
 
   ngOnInit() {
-    this.log.getLogs().subscribe(logs => this.logs = logs)
+    this.log.getLogs().subscribe(logs => this.logs = logs);
   }
 
   public onSelect(log: Log) {
     this.log.setFormLog(log);
+  }
+
+  public onDelete(log: Log) {
+    if (confirm('Are you sure ?')) {
+      this.log.deleteLog(log);
+    }
   }
 
 }

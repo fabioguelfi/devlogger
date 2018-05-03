@@ -11,6 +11,7 @@ export class LogFormComponent implements OnInit {
   public id: string;
   public text: string;
   public date: any;
+  public isNew = true;
 
   constructor(private log: LogService) { }
 
@@ -18,11 +19,45 @@ export class LogFormComponent implements OnInit {
     // subscribe  to the selected log observable
     this.log.selectedLog.subscribe((log: Log) => {
       if (log !== null) {
+        this.isNew = false;
         this.id = log.id;
         this.text = log.text;
         this.date = log.date;
       }
     });
   }
+
+  public onSubmit() {
+
+    // Check if  new log
+    if (this.isNew) {
+      // Create a new log
+      const newLog = {
+        id: this.generateId(),
+        text: this.text,
+        date: new Date()
+      };
+      // Add log
+      this.log.addLog(newLog);
+    } else {
+      // Create log to be updated
+      const updLog = {
+        id: this.id,
+        text: this.text,
+        date: new Date()
+      };
+      // Update log
+      this.log.updateLog(updLog);
+    }
+
+  }
+
+  public generateId() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
 
 }
